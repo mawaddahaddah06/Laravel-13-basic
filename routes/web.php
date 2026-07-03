@@ -1,19 +1,21 @@
 <?php
 
+
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\LecturerController;
+use App\Models\Lecturer;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [StudentController::class, 'index']);
+// Route::resource('student', StudentController::class);
 
-
-Route::get('/Student', [StudentController::class, 'index']);
-Route::get('/Student/create', [StudentController::class, 'create']);
-
-
-
-
-Route::get('/Student/create', function () {
-    return view('student.create', ['title' => 'CREATE STUDENT']);
-});
+Route::get('/', [StudentController::class, 'index']);
+Route::get('/student', [StudentController::class,'index'])->name('student.index');   
+Route::get('/student/create', [StudentController::class, 'create'])->name('student.create');
+Route::post('/student/store',[StudentController::class, 'store'])->name('student.store');
+Route::get('/student/{student}/edit', [StudentController::class, 'edit']) ->name('student.edit');
+Route::put('/student/{student}', [StudentController::class, 'update']) ->name('student.update');
+Route::delete('/student/{student}', [StudentController::class, 'destroy']) ->name('student.destroy');
+Route::resource('department', DepartmentController::class);
+Route::resource('lecturer', LecturerController::class);

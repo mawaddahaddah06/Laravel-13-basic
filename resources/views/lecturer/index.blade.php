@@ -1,21 +1,19 @@
 <x-app>
     <x-slot:title>{{ $title }}</x-slot>
-
     @session('success')
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endsession
 
-    <a class="btn btn-primary mb-3" href="{{ route('student.create') }}" role="button">Create</a>
+    <a class="btn btn-primary mb-3" href="{{ route('lecturer.create') }}" role="button">Create</a>
 
     <ul class="list-group">
-
-        @foreach ($students as $student)
+        @foreach ($lecturer as $lecturer)
             <li class="list-group-item">
-                {{ $student->nim }} {{ $student->name }}
-                <a class="btn btn-warning btn-sm" href="{{ route('student.edit', $student) }}" role="button">Edit</a>
-                <form action="{{ route('student.destroy', $student) }}" method="POST" class="d-inline">
+                {{ $loop->iteration }}. {{ $lecturer->name }} -- {{ $lecturer->department->name }}
+                <a class="btn btn-warning btn-sm" href="{{ route('lecturer.edit', $lecturer) }}" role="button">Edit</a>
+                <form action="{{ route('lecturer.destroy', $lecturer) }}" method="POST" class="d-inline">
                     @method('DELETE')
                     @csrf
 
@@ -25,4 +23,4 @@
             </li>
         @endforeach
     </ul>
-</x-app>
+</x-app>s

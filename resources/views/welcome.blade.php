@@ -1,1 +1,1 @@
-UNITAMA
+Univertisa Teknologi Akba Makassar
