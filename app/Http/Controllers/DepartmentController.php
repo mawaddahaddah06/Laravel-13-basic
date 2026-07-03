@@ -66,4 +66,4 @@ class DepartmentController extends Controller
     {
         //
     }
-}v 
+}
