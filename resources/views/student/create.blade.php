@@ -3,6 +3,7 @@
 
     <form method="POST" action="{{ route('student.store') }}">
         @csrf
+
         <div class="mb-3">
             <label for="name" class="form-label">Nama Mahasiswa</label>
             <input type="teks" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
@@ -22,4 +23,3 @@
         <a class="btn btn-warning" href="{{ route('student.index') }}" role="button">Cancel</a>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-</x-app>

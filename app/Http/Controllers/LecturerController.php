@@ -11,15 +11,27 @@ class LecturerController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
+        $lecturers = Lecturer::latest();
+        $keyword = request('keyword');
+        if($keyword){
+            $lecturers->where('name', 'like', '%'. $keyword. '%');
+        }
+
+        $department_id = request('department_id');
+        if($department_id){
+            $lecturers->where('department_id', $department_id);
+        }
+
         return view('lecturer.index', [
             'title' => 'Lecturer',
-            'lecturer' => Lecturer::latest()->get(),
-            //'lecturers' => Lecturer::orderBy('name', 'asc')->get(),
-            ]);
-    }   
-
+            'departments' => Department::latest()->get(),
+            'lecturers' => $lecturers->paginate(5)->withQueryString(),
+            // 'lecturers' => Lecturer::orderBy('name', 'asc')->get(),
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -30,7 +42,6 @@ class LecturerController extends Controller
             'departments' => Department::latest()->get(),
             ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -38,21 +49,21 @@ class LecturerController extends Controller
     {
         $validated = $request->validate([
         'name' => 'required|max:255',
-        'department_id' => 'required|exists:departments,id',
-    ], [
-        'name.required' => 'Nama Tidak Boleh Kosong',
-        'name.max' => 'Nama Maksimal 255 Karakter',
-        'department_id.required' => 'Program Studi Tidak Boleh Kosong',
-        'department_id.exists' => 'Program Studi Yang Dipilih Tidak Ditemukan',
-    ]);
+            'department_id' => 'required|exists:departments,id',
+        ], [
+            'name.required' => 'Nama Tidak Boleh Kosong',
+            'name.max' => 'Nama Maksimal 255 Karakter',
+            'department_id.required' => 'Program Studi Tidak Boleh Kosong',
+            'department_id.exists' => 'Program Studi Yang Dipilih Tidak Ditemukan',
+        ]);
 
-    Lecturer::create($validated);
-    return to_route('lecturer.index')->withSuccess('Data Berhasil Ditambahkan');
-    }
+        Lecturer::create($validated);
 
+        return to_route('lecturer.index')->withSuccess('Data Berhasil Ditambahkan');
     /**
      * Display the specified resource.
      */
+}
     public function show(Lecturer $lecturer)
     {
         //
@@ -66,8 +77,8 @@ class LecturerController extends Controller
         return view('lecturer.edit', [
             'title' => 'Edit Lecturer',
             'departments' => Department::latest()->get(),
-            'lecturer' => $lecturer, 
-            ]);
+            'lecturer' => $lecturer,
+        ]);
     }
 
     /**
@@ -77,24 +88,25 @@ class LecturerController extends Controller
     {
         $validated = $request->validate([
         'name' => 'required|max:255',
-        'department_id' => 'required|exists:departments,id',
-    ], [
-        'name.required' => 'Nama Tidak Boleh Kosong',
-        'name.max' => 'Nama Maksimal 255 Karakter',
-        'department_id.required' => 'Program Studi Tidak Boleh Kosong',
-        'department_id.exists' => 'Program Studi Yang Dipilih Tidak Ditemukan',
-    ]);
+            'department_id' => 'required|exists:departments,id',
+        ], [
+            'name.required' => 'Nama Tidak Boleh Kosong',
+            'name.max' => 'Nama Maksimal 255 Karakter',
+            'department_id.required' => 'Program Studi Tidak Boleh Kosong',
+            'department_id.exists' => 'Program Studi Yang Dipilih Tidak Ditemukan',
+        ]);
 
-    $lecturer->update($validated);
-    return to_route('lecturer.index')->withSuccess('Data Berhasil Diubah');
-    }
+        $lecturer->update($validated);
+
+        return to_route('lecturer.index')->withSuccess('Data Berhasil Diubah');
 
     /**
      * Remove the specified resource from storage.
      */
+}
     public function destroy(Lecturer $lecturer)
     {
-                $lecturer->delete($lecturer);
-        return to_route('lecturer.index')->withSuccess('Data Berhasil Dihapus'); 
+        $lecturer->delete($lecturer);
+        return to_route('lecturer.index')->withSuccess('Data Berhasil Dihapus');    
     }
-}
+}   
