@@ -18,6 +18,7 @@
                 <form action="{{ route('department.destroy', $department) }}" method="POST" class="d-inline">
                     @method('DELETE')
                     @csrf
+
                     <button type="submit" class="btn btn-danger btn-sm"
                         onclick="return confirm('Anda Yakin?')">Delete</button>
                 </form>

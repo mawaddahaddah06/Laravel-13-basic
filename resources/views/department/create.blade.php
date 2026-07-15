@@ -1,7 +1,7 @@
 <x-app>
     <x-slot:title>{{ $title }}</x-slot>
 
-    <form method="POST" action="{{ route('student.store') }}">
+    <form method="POST" action="{{ route('department.store') }}">
         @csrf
 
         <div class="mb-3">
@@ -22,7 +22,8 @@
             @enderror
         </div>
 
-        <a class="btn btn-warning" href="{{ route('student.index') }}" role="button">Cancel</a>
+        <a class="btn btn-warning" href="{{ route('department.index') }}" role="button">Cancel</a>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </x-app>
+s

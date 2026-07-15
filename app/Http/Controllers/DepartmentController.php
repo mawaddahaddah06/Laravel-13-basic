@@ -24,19 +24,30 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('department.create', 
+        ['title' => 'Create department']);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Department $department)
+    public function store(Request $request)
     {
-        return view('department.show', [
-            'title' => 'Detail Department',
-            'department' => $department, 
-            //'departments' => Department::orderBy('name', 'asc')->get(),
-            ]);
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'nim' => 'required|digits:11|numeric',
+        ], [
+            'name.required' => 'Nama Tidak Boleh Kosong',
+            'name.max' => 'Nama Maksimal 255 Karakter',
+            'nim.required' => 'NIM Tidak Boleh Kosong',
+            'nim.digits' => 'NIM Harus 11 Digit',
+            'nim.numeric' => 'NIM Harus Angka',
+        ]
+        );
+
+    Department::create($validated);
+
+        return to_route('department.index')->withSuccess('Data Berhasil Ditambahkan');
     }
 
     /**
@@ -56,7 +67,10 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        return view('department.edit', [
+            'title' => 'Edit Department',
+            'department' => $department,
+        ]);
     }
 
     /**
@@ -64,7 +78,20 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'nim' => 'required|digits:11|numeric',
+        ], [
+            'name.required' => 'Nama Tidak Boleh Kosong',
+            'name.max' => 'Nama Maksimal 255 Karakter',
+            'nim.required' => 'NIM Tidak Boleh Kosong',
+            'nim.digits' => 'NIM Harus 11 Digit',
+            'nim.numeric' => 'NIM Harus Angka',
+        ]);
+
+        $department->update($validated);
+
+        return to_route('department.index')->withSuccess('Data Berhasil Diubah');
     }
 
     /**
@@ -72,6 +99,8 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete($department);
+
+        return to_route('department.index')->withSuccess('Data Berhasil Dihapus');
     }
 }

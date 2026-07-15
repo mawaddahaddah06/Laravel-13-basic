@@ -24,7 +24,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('student.create', ['title' => 'Create Student']);
+        return view('student.create', 
+        ['title' => 'Create Student']);
     }
 
     /**
@@ -33,7 +34,7 @@ class StudentController extends Controller
     public function store(Request $request)
 {
         $validated = $request->validate([
-        'name' => 'required|max:255',
+            'name' => 'required|max:255',
             'nim' => 'required|digits:11|numeric',
         ], [
             'name.required' => 'Nama Tidak Boleh Kosong',
@@ -46,7 +47,7 @@ class StudentController extends Controller
 
     Student::create($validated);
 
-    return to_route('student.index')->withSuccess('Data Berhasil Ditambahkan');
+        return to_route('student.index')->withSuccess('Data Berhasil Ditambahkan');
 }
 
     /**
@@ -65,7 +66,6 @@ class StudentController extends Controller
         return view('student.edit', [
             'title' => 'Edit Student',
             'student' => $student,
-
         ]);
     }
 
@@ -75,7 +75,7 @@ class StudentController extends Controller
     public function update(Request $request, Student $student)
     {
         $validated = $request->validate([
-        'name' => 'required|max:255',
+            'name' => 'required|max:255',
             'nim' => 'required|digits:11|numeric',
         ], [
             'name.required' => 'Nama Tidak Boleh Kosong',
@@ -86,8 +86,9 @@ class StudentController extends Controller
         ]);
 
         $student->update($validated);
+
         return to_route('student.index')->withSuccess('Data Berhasil Diubah');
-}
+    }
 
     /** 
      * Remove the specified resource from storage.
@@ -95,6 +96,28 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $student->delete($student);
+
         return to_route('student.index')->withSuccess('Data Berhasil Dihapus');
+    }
+
+    //soft deletes
+    public function trash()
+    {
+        return view('student.trash', [
+            'title' => 'Trash Student',
+            'students' => Student::onlyTrashed()->latest()->get(),
+        ]);
+    }
+
+    public function restore(Student $student)
+    {
+        $student->restore();
+        return to_route('student.trash')->withSuccess('Data Berhasil Dipulihkan');
+    }
+
+    public function forceDelete(Student $student)
+    {
+        $student->forceDelete();
+        return to_route('student.trash')->withSuccess('Data Berhasil Dihapus Secara Permanen');
     }
 }
